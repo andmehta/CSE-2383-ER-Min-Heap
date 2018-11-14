@@ -18,10 +18,24 @@ using std::string;
 
 int options_build();
 int options_run();
-void display_patient(ER_queue ER_queue);
-void add_pat(ER_queue ER_queue);
+void display_patient(ER_queue &ER_queue);
+void add_pat(ER_queue &ER_queue);
+
 
 int main()
+{
+	ER_queue ER_queue;
+
+
+	ER_queue.insert("Andrew", "headache", 3);
+
+	add_pat(ER_queue);
+	display_patient(ER_queue);
+	display_patient(ER_queue);
+
+	return 0;
+}
+/*int main()
 {
 	cout << "WELCOME TO THE ER\n" << endl;
 
@@ -35,32 +49,36 @@ int main()
 			break;
 	//enter run mode
 	case 2: ER_queue.set_mode(true);
-			cout << "ER_queue mode:" << ER_queue.get_mode();
+			cout << "\nRun Mode\n" << endl;
+			//run mode
+				while (ER_queue.get_mode())
+				{
+					switch(options_run())
+					{
+					//peek
+					case 1: display_patient(ER_queue);
+							break;
+					//remove
+					case 2: display_patient(ER_queue);
+							break;
+					//exit
+					case 3: ER_queue.set_mode(false);
+							break;
+					}
+
+
+				}
 			break;
+
 	//exit
-	case 3: break;
+	case 3: ER_queue.set_mode(true);
+			break;
 							}
 	}
 
 
-	//run mode
-	while (ER_queue.get_mode())
-	{
-		switch(options_run())
-		{
-		//peek
-		case 1: display_patient(ER_queue);
-				break;
-		//remove
-		case 2: display_patient(ER_queue);
-				break;
-		//exit
-		case 3: break;
-		}
-	}
-
 	return 0;
-}
+}*/
 
 int options_build()
 {
@@ -87,16 +105,17 @@ int options_run()
 	return answer;
 }
 
-void display_patient(ER_queue ER_queue)
+void display_patient(ER_queue &ER_queue)
 {
 	patient* pop = ER_queue.remove();
 
 	cout << "Name: " << pop->name << "\n"
 		 <<	"Complaint: " << pop->complaint << "\n"
-		 << "Ticket: " << pop->ticket;
+		 << "Ticket: " << pop->ticket << endl;
+
 	delete pop;
 }
-void add_pat(ER_queue ER_queue)
+void add_pat(ER_queue &ER_queue)
 {
 	string name;
 	string complaint;
@@ -107,15 +126,10 @@ void add_pat(ER_queue ER_queue)
 	cout << "What is the patients complaint? ";
 	cin >> complaint;
 
-	cout << "What is the patients priority? ";
+	cout << "What is the patients priority?(1-5) ";
 	cin >> priority;
 
-	if( ER_queue.insert(name, complaint, priority) )
-	{
-		cout << "success\n";
-	}
-
-	else{cout << "failure\n";}
+	ER_queue.insert(name, complaint, priority);
 
 
 }
